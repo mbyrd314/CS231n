@@ -233,41 +233,7 @@ class TwoLayerNet(object):
       'val_acc_history': val_acc_history,
     }
 
-  def PCA(self, X):
-    """
-    Compute the PCA of the input vector to reduce dimensionality
-    
-    Inputs:
-    - X: A numpy array of shape (N, D) giving N D-dimensional data points to
-      classify.
-    
-    Returns:
-    - T: A numpy array of shape (N, L) giving N data points containing the L
-      most important dimensions that maintain 90% of the information of the original
-      features
-    """
-    X -= np.mean(X, axis=0)
-    N, D = X.shape
-    U, s, Vt = np.linalg.svd(X, full_matrices=False)
-    V = Vt.T
-    S = np.diag(s)
-    
-    pc = U.dot(S)
-    s_pc_pairs = [(s[i], pc[:, i]) for i in range(pc.shape[1])]
-    eig = s**2/(N-1)
-    eig_total = np.sum(eig)
-    print((eig, eig_total))
-    eig_sum = 0
-    L = 0
-    if eig_total < 1e5:
-      return X
-    for i in range(pc.shape[1]):
-      if eig_sum / eig_total < 0.9:
-        L += 1
-        eig_sum += eig[i]
-        
-    T = U[:, :L].dot(S[:L, :L]).dot(Vt[:L, :])
-    return T
+
   
   def predict(self, X):
     """
